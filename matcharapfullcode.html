@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATCHARAP | Premium Matcha & Coffee Fusion</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        matcha: {
+                            50: '#e8f5e9',
+                            100: '#c8e6c9',
+                            200: '#a5d6a7',
+                            300: '#8fbc8f',
+                            400: '#66bb6a',
+                            500: '#3e7b33',
+                            600: '#2d5a27',
+                            700: '#23471f',
+                            800: '#1a3517',
+                            900: '#10220e',
+                        },
+                        coffee: {
+                            50: '#f5f0eb',
+                            100: '#d7ccc8',
+                            200: '#bcaaa4',
+                            300: '#8c6239',
+                            400: '#734e2c',
+                            500: '#5c3a21',
+                            600: '#3d2314',
+                            700: '#2c180d',
+                            800: '#1d0f08',
+                            900: '#0e0704',
+                        },
+                        cream: '#F2F6EA'                      },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f5f0eb; }
+        ::-webkit-scrollbar-thumb { background: #2d5a27; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #1a3517; }
+        .glass-nav {
+            background: rgba(250, 248, 245, 0.90);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(16, 34, 14, 0.88) 0%, rgba(61, 35, 20, 0.85) 100%);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-cream text-coffee-600 font-sans antialiased selection:bg-matcha-100 selection:text-matcha-900 flex flex-col min-h-screen">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-24 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 glass-nav border-b border-matcha-100/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <button onclick="navigateTo('home')" class="flex items-center gap-2 group text-left">
+                    <div class="w-10 h-10 rounded-full bg-matcha-600 flex items-center justify-center text-cream shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-leaf text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-serif text-2xl font-bold tracking-wider text-matcha-600 block leading-none">MATCHA<span class="text-coffee-500">RAP</span></span>
+                        <span class="text-[9px] tracking-widest uppercase font-semibold text-coffee-400 block mt-0.5">Uji & Espresso Fusion</span>
+                    </div>
+                </button>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8 font-medium text-sm">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn text-matcha-600 font-semibold transition-colors py-1">Home</button>
+                    <button onclick="navigateTo('products')" id="nav-products" class="nav-btn text-coffee-500 hover:text-matcha-600 transition-colors py-1">Menu & Shop</button>
+                    <button onclick="navigateTo('about')" id="nav-about" class="nav-btn text-coffee-500 hover:text-matcha-600 transition-colors py-1">About us</button>
+                    <button onclick="navigateTo('contact')" id="nav-contact" class="nav-btn text-coffee-500 hover:text-matcha-600 transition-colors py-1">Contact Us</button>
+                </nav>
+
+                <!-- Right Icons -->
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <!-- Wishlist Counter -->
+                    <button onclick="filterWishlist()" class="relative p-2 text-coffee-500 hover:text-matcha-600 transition" title="View Wishlist">
+                        <i class="fa-regular fa-heart text-xl"></i>
+                        <span id="wishlist-badge" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center transform translate-x-1 -translate-y-1 scale-0 transition-transform duration-200">0</span>
+                    </button>
+
+                    <!-- Cart Icon -->
+                    <button onclick="navigateTo('cart')" class="relative p-2 text-coffee-500 hover:text-matcha-600 transition" aria-label="Shopping Cart">
+                        <i class="fa-solid fa-basket-shopping text-xl"></i>
+                        <span id="cart-count-badge" class="absolute top-0 right-0 bg-matcha-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center transform translate-x-1 -translate-y-1 scale-0 transition-transform duration-200">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Trigger -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-coffee-600 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cream border-b border-matcha-100 px-6 py-4 space-y-3 shadow-xl">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left py-2 font-medium text-coffee-600 hover:text-matcha-600">Home</button>
+            <button onclick="navigateTo('products'); toggleMobileMenu()" class="block w-full text-left py-2 font-medium text-coffee-600 hover:text-matcha-600">Menu & Shop</button>
+            <button onclick="navigateTo('about'); toggleMobileMenu()" class="block w-full text-left py-2 font-medium text-coffee-600 hover:text-matcha-600">About us</button>
+            <button onclick="navigateTo('contact'); toggleMobileMenu()" class="block w-full text-left py-2 font-medium text-coffee-600 hover:text-matcha-600">Contact Us</button>
+        </div>
+    </header>
+
+    <!-- MAIN SPA VIEWS -->
+    <main class="flex-grow">
+        
+        <!-- 1. HOME VIEW -->
+        <section id="view-home" class="page-view animate-fade-in">
+            <!-- Hero Banner -->
+            <div class="relative min-h-[82vh] flex items-center bg-cover bg-center overflow-hidden" style="background-image: url('https://i.pinimg.com/736x/ac/cd/68/accd6821ced01140cb198b829b20a457.jpg');">
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-cream">
+                    <div class="max-w-2xl space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-matcha-500/30 border border-matcha-300/30 text-matcha-100 text-xs tracking-wider uppercase font-semibold backdrop-blur-sm">
+                            <i class="fa-solid fa-seedling"></i> Pure Matcha × Specialty Coffee
+                        </div>
+                        <h1 class="font-serif text-4xl sm:text-6xl font-bold leading-tight tracking-wide">
+                            Matcha Meets <span class="text-matcha-200 italic">Masarap.</span>
+                        </h1>
+                        <p class="text-base sm:text-lg text-cream/90 font-light leading-relaxed">
+                            The greener, The healthier
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="navigateTo('products')" class="px-8 py-4 bg-matcha-600 hover:bg-matcha-500 text-cream font-semibold rounded-xl shadow-lg hover:shadow-matcha-600/30 transition duration-300 flex items-center gap-2">
+                                Order Online <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                            <button onclick="navigateTo('about')" class="px-8 py-4 bg-cream/10 hover:bg-cream/20 border border-cream/30 text-cream font-semibold rounded-xl backdrop-blur-sm transition duration-300">
+                                Discover Story
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value Highlights -->
+            <div class="py-14 bg-white border-b border-matcha-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                        <div class="p-6 rounded-2xl bg-cream/60 border border-matcha-100/80">
+                            <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-matcha-100 text-matcha-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-leaf"></i>
+                            </div>
+                            <h3 class="font-serif font-bold text-coffee-600 mb-1">100% Ceremonial Uji</h3>
+                            <p class="text-xs text-coffee-400">First-harvest shade-grown green tea ground on stone mills.</p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-cream/60 border border-matcha-100/80">
+                            <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-coffee-100 text-coffee-500 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-mug-hot"></i>
+                            </div>
+                            <h3 class="font-serif font-bold text-coffee-600 mb-1">Micro-Roast Espresso</h3>
+                            <p class="text-xs text-coffee-400">Single-origin beans custom roasted to pair with matcha creaminess.</p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-cream/60 border border-matcha-100/80">
+                            <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-matcha-100 text-matcha-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-cookie-bite"></i>
+                            </div>
+                            <h3 class="font-serif font-bold text-coffee-600 mb-1">Daily Handbaked Treats</h3>
+                            <p class="text-xs text-coffee-400">Flaky croissants, burnt cheesecakes, and matcha glazed pastries.</p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-cream/60 border border-matcha-100/80">
+                            <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-coffee-100 text-coffee-500 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </div>
+                            <h3 class="font-serif font-bold text-coffee-600 mb-1">Fresh Dispatch</h3>
+                            <p class="text-xs text-coffee-400">Temperature-controlled express delivery straight to your door.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <div class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <span class="text-matcha-600 font-semibold tracking-wider uppercase text-xs">Chef Specials</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-coffee-600 mt-1">Best-Selling Fusions</h2>
+                    </div>
+                    <button onclick="navigateTo('products')" class="mt-4 md:mt-0 text-matcha-600 hover:text-matcha-700 font-semibold text-sm flex items-center gap-1 group">
+                        Browse Full Menu <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+
+                <div id="home-featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
+
+            <!-- Promo Banner -->
+            <div class="bg-matcha-600 text-cream py-16 relative overflow-hidden my-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="max-w-xl space-y-3 text-center md:text-left">
+                        <span class="bg-matcha-500 text-cream px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Limited Offer</span>
+                        <h2 class="font-serif text-3xl font-bold">Use Code 'MATCHA10' for 10% Off</h2>
+                        <p class="text-matcha-100 text-sm">Experience your first taste of authentic Kyoto matcha and artisan espresso blends at a special price.</p>
+                    </div>
+                    <button onclick="navigateTo('products')" class="px-8 py-3.5 bg-cream text-matcha-700 font-bold rounded-xl shadow-lg hover:bg-matcha-50 transition">
+                        Claim Discount Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Customer Reviews Section -->
+            <div class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-xl mx-auto mb-12">
+                    <span class="text-matcha-600 text-xs font-semibold uppercase tracking-widest">Testimonials</span>
+                    <h2 class="font-serif text-3xl font-bold text-coffee-600 mt-1">Loved by Tea & Coffee Drinkers</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-2xl border border-matcha-100 shadow-sm space-y-4">
+                        <div class="text-amber-400 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-coffee-500 italic text-sm">"The Matcha Espresso Fusion has the ideal contrast between bittersweet coffee and creamy ceremonial matcha."</p>
+                        <div class="flex items-center gap-3 pt-2">
+                            <div class="w-10 h-10 rounded-full bg-matcha-100 flex items-center justify-center font-bold text-matcha-700">AM</div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-coffee-600">Angela M.</h4>
+                                <p class="text-xs text-coffee-400">Verified Buyer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl border border-matcha-100 shadow-sm space-y-4">
+                        <div class="text-amber-400 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-coffee-500 italic text-sm">"The Basque Burnt Cheesecake is melted perfection. Rich matcha aroma in every bite!"</p>
+                        <div class="flex items-center gap-3 pt-2">
+                            <div class="w-10 h-10 rounded-full bg-coffee-100 flex items-center justify-center font-bold text-coffee-600">JR</div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-coffee-600">Justin R.</h4>
+                                <p class="text-xs text-coffee-400">Verified Buyer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl border border-matcha-100 shadow-sm space-y-4">
+                        <div class="text-amber-400 text-sm">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-coffee-500 italic text-sm">"Quick delivery, immaculate packaging, and super smooth Strawberry Matcha Cloud drink."</p>
+                        <div class="flex items-center gap-3 pt-2">
+                            <div class="w-10 h-10 rounded-full bg-matcha-100 flex items-center justify-center font-bold text-matcha-700">CS</div>
+                            <div>
+                                <h4 class="font-semibold text-sm text-coffee-600">Carla S.</h4>
+                                <p class="text-xs text-coffee-400">Verified Buyer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Signup -->
+            <div class="bg-coffee-600 text-cream py-16">
+                <div class="max-w-3xl mx-auto px-4 text-center space-y-4">
+                    <i class="fa-regular fa-paper-plane text-3xl text-matcha-200"></i>
+                    <h2 class="font-serif text-3xl font-bold">Stay Whisked & Updated</h2>
+                    <p class="text-coffee-100 text-sm">Subscribe to receive secret recipes, seasonal batch releases, and exclusive promos.</p>
+                    <form onsubmit="handleNewsletter(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-2">
+                        <input type="email" required placeholder="Enter your email address" class="px-4 py-3 rounded-xl bg-white text-coffee-600 text-sm focus:outline-none flex-grow">
+                        <button type="submit" class="px-6 py-3 bg-matcha-600 hover:bg-matcha-500 text-white font-bold rounded-xl text-sm transition">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PRODUCTS / CATALOG VIEW -->
+        <section id="view-products" class="page-view hidden py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="font-serif text-3xl sm:text-4xl font-bold text-coffee-600">Menu & Catalog</h1>
+                    <p class="text-xs sm:text-sm text-coffee-400 mt-1">Explore our Kyoto matcha beverages, espresso blends, and bakery treats.</p>
+                </div>
+                <!-- Search & Filters -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-coffee-300 text-xs"></i>
+                        <input type="text" id="catalog-search" oninput="applyCatalogFilters()" placeholder="Search matcha, latte, croissant..." class="pl-9 pr-4 py-2.5 bg-white border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500 w-full sm:w-60">
+                    </div>
+                    <select id="catalog-sort" onchange="applyCatalogFilters()" class="bg-white border border-coffee-100 rounded-xl px-3 py-2.5 text-xs text-coffee-600 focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                        <option value="popular">Most Popular</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Categories & Price Slider -->
+            <div class="bg-white p-4 rounded-2xl border border-matcha-100 mb-8 space-y-4">
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+                    <button onclick="setCategoryFilter('all')" class="cat-btn active px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-matcha-600 text-white" data-cat="all">All Items</button>
+                    <button onclick="setCategoryFilter('Matcha Drinks')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-cream text-coffee-600 border border-coffee-100 hover:bg-matcha-50" data-cat="Matcha Drinks">Matcha Drinks</button>
+                    <button onclick="setCategoryFilter('Coffee Fusions')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-cream text-coffee-600 border border-coffee-100 hover:bg-matcha-50" data-cat="Coffee Fusions">Coffee Fusions</button>
+                    <button onclick="setCategoryFilter('Matcha Pastries')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-cream text-coffee-600 border border-coffee-100 hover:bg-matcha-50" data-cat="Matcha Pastries">Matcha Pastries</button>
+<button onclick="setCategoryFilter('Matcha Desserts')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-cream text-coffee-600 border border-coffee-100 hover:bg-matcha-50" data-cat="Matcha Desserts">Matcha Desserts</button>
+                    <button onclick="setCategoryFilter('Wholesale/Packs')" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-cream text-coffee-600 border border-coffee-100 hover:bg-matcha-50" data-cat="Wholesale/Packs">Wholesale/Packs</button>
+                </div>
+                <div class="flex items-center gap-4 text-xs pt-2 border-t border-coffee-50">
+                    <span class="font-semibold text-coffee-600">Max Price: <span id="price-range-val" class="text-matcha-600 font-bold">₱600</span></span>
+                    <input type="range" id="price-range" min="100" max="600" step="20" value="600" oninput="applyCatalogFilters()" class="w-48 accent-matcha-600">
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="catalog-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <div id="no-products-msg" class="hidden py-16 text-center text-coffee-400">
+                <i class="fa-solid fa-mug-saucer text-4xl mb-3 text-coffee-200"></i>
+                <p class="text-sm font-medium">No items match your criteria.</p>
+                <button onclick="resetFilters()" class="mt-2 text-xs text-matcha-600 underline font-semibold">Reset filters</button>
+            </div>
+        </section>
+
+        <!-- 3. PRODUCT DETAILS VIEW -->
+        <section id="view-product-detail" class="page-view hidden py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
+            <button onclick="navigateTo('products')" class="mb-6 text-xs font-semibold text-coffee-500 hover:text-matcha-600 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Catalog
+            </button>
+            <div id="product-detail-container" class="bg-white rounded-3xl border border-matcha-100 p-6 sm:p-10 shadow-sm">
+                <!-- Populated via JS -->
+            </div>
+        </section>
+
+        <!-- 4. CART & CHECKOUT VIEW -->
+        <section id="view-cart" class="page-view hidden py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
+            <h1 class="font-serif text-3xl font-bold text-coffee-600 mb-8">Your Order Basket</h1>
+
+            <div id="cart-empty-state" class="hidden text-center py-20 bg-white rounded-3xl border border-matcha-100">
+                <div class="w-16 h-16 bg-matcha-100 text-matcha-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                </div>
+                <h3 class="text-lg font-bold text-coffee-600 mb-1">Your basket is empty</h3>
+                <p class="text-coffee-400 text-xs mb-6">Explore our ceremonial drinks and matcha pastries.</p>
+                <button onclick="navigateTo('products')" class="px-6 py-3 bg-matcha-600 hover:bg-matcha-700 text-white rounded-xl text-xs font-semibold transition">
+                    Browse Menu
+                </button>
+            </div>
+
+            <div id="cart-main-layout" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Items list -->
+                <div class="lg:col-span-8 space-y-4" id="cart-items-container">
+                    <!-- Populated via JS -->
+                </div>
+
+                <!-- Order summary -->
+                <div class="lg:col-span-4">
+                    <div class="bg-white p-6 rounded-3xl border border-matcha-100 shadow-sm sticky top-28 space-y-5">
+                        <h3 class="font-serif text-lg font-bold text-coffee-600 pb-3 border-b border-coffee-50">Summary</h3>
+                        
+                        <!-- Promo Code -->
+                        <div class="flex gap-2">
+                            <input type="text" id="promo-input" placeholder="Promo (MATCHA10)" class="uppercase bg-cream border border-coffee-100 rounded-xl px-3 py-2 text-xs w-full focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                            <button onclick="applyPromoCode()" class="px-4 py-2 bg-coffee-600 hover:bg-coffee-700 text-white text-xs font-semibold rounded-xl transition">Apply</button>
+                        </div>
+                        <p id="promo-msg" class="text-[11px] hidden"></p>
+
+                        <div class="space-y-2.5 text-xs text-coffee-500">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span id="cart-subtotal" class="font-semibold text-coffee-600">₱0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Estimated Shipping</span>
+                                <span id="cart-shipping" class="font-semibold text-coffee-600">₱0.00</span>
+                            </div>
+                            <div id="cart-discount-row" class="flex justify-between text-matcha-600 font-semibold hidden">
+                                <span>Discount</span>
+                                <span id="cart-discount">-₱0.00</span>
+                            </div>
+                            <div class="border-t border-coffee-50 pt-3 flex justify-between text-sm font-bold text-coffee-600">
+                                <span>Total</span>
+                                <span id="cart-total" class="text-matcha-600 text-base">₱0.00</span>
+                            </div>
+                        </div>
+
+                        <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-matcha-600 hover:bg-matcha-700 text-white font-bold rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2 text-xs">
+                            Proceed to Checkout <i class="fa-solid fa-lock text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ABOUT US VIEW -->
+        <section id="view-about" class="page-view hidden py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-matcha-600 uppercase tracking-widest text-xs font-semibold">Our Heritage</span>
+                <h1 class="font-serif text-4xl font-bold text-coffee-600 mt-2">The Story of MATCHARAP</h1>
+                <p class="text-coffee-400 mt-3 text-sm leading-relaxed">
+                    Connecting Japanese traditional tea mastery with Filipino 'Masarap' (delicious) culinary passion.
+                </p>
+            </div>
+
+            <!-- Image Banner -->
+            <div class="relative h-80 rounded-3xl overflow-hidden mb-12 shadow-md">
+                <img src="Matcha and Coffee Café Still Life.png" alt="Matcha Plantation Uji" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-matcha-900/80 via-transparent to-transparent flex items-end p-8">
+                    <p class="text-cream text-lg font-serif italic max-w-xl">
+                        "First harvest Uji green tea leaves whisked to vibrant perfection."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pillars -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl border border-matcha-100 space-y-2">
+                    <h3 class="font-serif text-lg font-bold text-matcha-600">1. Direct Farm Sourcing</h3>
+                    <p class="text-xs text-coffee-400 leading-relaxed">We source directly from heritage tea estates in Uji, Kyoto. Leaves are shade-grown for 20+ days for high l-theanine and vibrant green hue.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-matcha-100 space-y-2">
+                    <h3 class="font-serif text-lg font-bold text-matcha-600">2. Specialty Espresso Craft</h3>
+                    <p class="text-xs text-coffee-400 leading-relaxed">Our arabica espresso beans are roasted in small batches to complement matcha without overpowering its delicate umami notes.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-matcha-100 space-y-2">
+                    <h3 class="font-serif text-lg font-bold text-matcha-600">3. Everyday Warmth</h3>
+                    <p class="text-xs text-coffee-400 leading-relaxed">We aim to bring approachable luxury to everyday routines with handcrafted sips and freshly baked treats.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CONTACT US VIEW -->
+        <section id="view-contact" class="page-view hidden py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h1 class="font-serif text-3xl sm:text-4xl font-bold text-coffee-600">Get in Touch</h1>
+                <p class="text-coffee-400 text-xs mt-2">Questions about catering, orders, or our matcha sourcing? Reach out!</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Form -->
+                <div class="lg:col-span-7 bg-white p-8 rounded-3xl border border-matcha-100 shadow-sm">
+                    <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-coffee-600 mb-1">Full Name</label>
+                                <input type="text" required placeholder="Juana Dela Cruz" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-coffee-600 mb-1">Email Address</label>
+                                <input type="email" required placeholder="juana@example.com" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-coffee-600 mb-1">Subject</label>
+                            <input type="text" required placeholder="Order inquiry / Catering" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-coffee-600 mb-1">Message</label>
+                            <textarea rows="4" required placeholder="How can we assist you today?" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-matcha-600 hover:bg-matcha-700 text-white font-bold rounded-xl text-xs transition shadow-md">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Cafe Info & FAQ -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-matcha-900 text-cream p-6 sm:p-8 rounded-3xl space-y-4">
+                        <h3 class="font-serif text-xl font-bold text-matcha-200">Flagship Cafe</h3>
+                        <div class="space-y-3 text-xs text-cream/90">
+                            <p class="flex items-start gap-2.5"><i class="fa-solid fa-location-dot mt-0.5 text-matcha-300"></i> 123 Matcha Lane, Davao City, Philippines</p>
+                            <p class="flex items-center gap-2.5"><i class="fa-solid fa-clock text-matcha-300"></i> Mon - Sun: 7:00 AM - 9:00 PM</p>
+                            <p class="flex items-center gap-2.5"><i class="fa-solid fa-phone text-matcha-300"></i> +63 (02) 8888-MATCH</p>
+                            <p class="flex items-center gap-2.5"><i class="fa-solid fa-envelope text-matcha-300"></i> hello@matcharap.ph</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div class="bg-white p-6 rounded-3xl border border-matcha-100 space-y-3">
+                        <h4 class="font-serif font-bold text-coffee-600 text-sm">Frequently Asked Questions</h4>
+                        <details class="group border-b border-coffee-50 pb-2">
+                            <summary class="cursor-pointer font-semibold text-xs text-coffee-600 flex justify-between items-center py-1">
+                                Are plant-based milk options available?
+                                <i class="fa-solid fa-chevron-down text-[10px] group-open:rotate-180 transition"></i>
+                            </summary>
+                            <p class="text-xs text-coffee-400 mt-1.5">Yes! All beverages can be customized with Oat Milk or Almond Milk.</p>
+                        </details>
+                        <details class="group border-b border-coffee-50 pb-2">
+                            <summary class="cursor-pointer font-semibold text-xs text-coffee-600 flex justify-between items-center py-1">
+                                How fast is local express delivery?
+                                <i class="fa-solid fa-chevron-down text-[10px] group-open:rotate-180 transition"></i>
+                            </summary>
+                            <p class="text-xs text-coffee-400 mt-1.5">Orders placed within Metro Manila are dispatched within 45 to 60 minutes in thermal containers.</p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- QUICK VIEW MODAL -->
+    <div id="quick-view-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-2xl w-full rounded-3xl shadow-2xl p-6 relative animate-fade-in max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuickViewModal()" class="absolute top-4 right-4 text-coffee-300 hover:text-coffee-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="quick-view-content" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <!-- Dynamically Populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-lg w-full rounded-3xl shadow-2xl p-6 sm:p-8 overflow-y-auto max-h-[90vh] relative animate-fade-in">
+            <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-coffee-300 hover:text-coffee-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h2 class="font-serif text-2xl font-bold text-coffee-600 mb-1">Checkout & Delivery</h2>
+            <p class="text-xs text-coffee-400 mb-6">Enter your details to finalize your order dispatch.</p>
+
+            <form id="checkout-form" onsubmit="processOrder(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-coffee-600 mb-1">Full Name</label>
+                    <input type="text" required id="chk-name" placeholder="Juana Dela Cruz" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-coffee-600 mb-1">Phone Number</label>
+                        <input type="tel" required id="chk-phone" placeholder="0917 123 4567" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-coffee-600 mb-1">Payment Method</label>
+                        <select id="chk-payment" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500">
+                            <option value="GCash / Maya">GCash / Maya</option>
+                            <option value="Credit / Debit Card">Credit Card</option>
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-coffee-600 mb-1">Delivery Address</label>
+                    <textarea required id="chk-address" rows="2" placeholder="House/Unit No., Street, Barangay, City" class="w-full px-3.5 py-2.5 bg-cream border border-coffee-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-matcha-500"></textarea>
+                </div>
+
+                <div class="bg-matcha-50 border border-matcha-100 rounded-2xl p-4 text-xs space-y-1">
+                    <div class="flex justify-between font-bold text-matcha-800">
+                        <span>Total Payable:</span>
+                        <span id="modal-checkout-total">₱0.00</span>
+                    </div>
+                    <p class="text-[10px] text-matcha-600">Includes taxes & estimated local express dispatch.</p>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-matcha-600 hover:bg-matcha-700 text-white font-bold rounded-xl transition shadow-md text-xs">
+                    Place Order Now
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ORDER RECEIPT MODAL -->
+    <div id="receipt-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full rounded-3xl shadow-2xl p-6 text-center space-y-4">
+            <div class="w-14 h-14 bg-matcha-100 text-matcha-600 rounded-full flex items-center justify-center text-2xl mx-auto">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2 class="font-serif text-2xl font-bold text-coffee-600">Order Confirmed!</h2>
+            <p class="text-xs text-coffee-400">Thank you! Your MATCHARAP treats are being prepared with love.</p>
+            
+            <div id="receipt-details" class="bg-cream p-4 rounded-2xl text-left text-xs space-y-2 text-coffee-600 border border-coffee-100">
+                <!-- Dynamic Content -->
+            </div>
+
+            <button onclick="closeReceiptModal()" class="w-full py-3 bg-matcha-600 hover:bg-matcha-700 text-white font-bold rounded-xl text-xs transition">
+                Back to Menu
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-coffee-700 text-cream/80 border-t border-coffee-600 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="space-y-3">
+                    <button onclick="navigateTo('home')" class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-matcha-500 text-cream flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <span class="font-serif text-xl font-bold text-white tracking-wider">MATCHA<span class="text-coffee-200">RAP</span></span>
+                    </button>
+                    <p class="text-xs text-cream/70 leading-relaxed">
+                        Pure Kyoto Uji Matcha fused with specialty espresso & fresh daily bakes.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-serif text-white font-bold text-sm mb-3">Quick Links</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><button onclick="navigateTo('home')" class="hover:text-matcha-200 transition">Home</button></li>
+                        <li><button onclick="navigateTo('products')" class="hover:text-matcha-200 transition">Menu & Catalog</button></li>
+                        <li><button onclick="navigateTo('about')" class="hover:text-matcha-200 transition">About us</button></li>
+                        <li><button onclick="navigateTo('contact')" class="hover:text-matcha-200 transition">Contact Us</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-white font-bold text-sm mb-3">Categories</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><button onclick="navigateTo('products'); setCategoryFilter('Matcha Drinks')" class="hover:text-matcha-200 transition">Matcha Drinks</button></li>
+                        <li><button onclick="navigateTo('products'); setCategoryFilter('Coffee Fusions')" class="hover:text-matcha-200 transition">Coffee Fusions</button></li>
+                        <li><button onclick="navigateTo('products'); setCategoryFilter('Matcha Pastries')" class="hover:text-matcha-200 transition">Matcha Pastries</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-white font-bold text-sm mb-3">Follow Our Sips</h4>
+                    <div class="flex space-x-3 text-lg text-cream/80 mb-4">
+                        <a href="#" class="hover:text-matcha-200 transition" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="hover:text-matcha-200 transition" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-matcha-200 transition" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                    <p class="text-[11px] text-cream/60">© 2026 MATCHARAP Inc. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+<!-- JAVASCRIPT LOGIC -->
+<script>
+    // 1. PRODUCTS DATA
+    const PRODUCTS = [
+{
+            id: 'm1',
+            title: 'Ceremonial Grade Iced Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 195,
+            rating: 4.9,
+            reviewsCount: 128,
+            image: 'Ceremonial Grade Iced Matcha Latte.jpg',
+            description: 'Pure 1st-harvest Uji matcha whisked with fresh whole milk and subtle vanilla blossom nectar.',
+            ingredients: 'Uji Matcha Powder, Filtered Water, Fresh Milk, Cane Syrup, Ice.'
+        },
+        {
+            id: 'm2',
+            title: 'Coconut Matcha',
+            category: 'Matcha Drinks',
+            price: 195,
+            rating: 4.9,
+            reviewsCount: 128,
+            image: 'Coconut Matcha.jpg',
+            description: 'Pure 1st-harvest Uji matcha whisked with fresh whole milk and subtle vanilla blossom nectar.',
+            ingredients: 'Uji Matcha Powder, Filtered Water, Fresh Milk, Cane Syrup, Ice.'
+        },
+        {
+            id: 'm3',
+            title: 'Dirty Coco Matcha Latte',
+            category: 'Coffee Fusions',
+            price: 215,
+            rating: 4.9,
+            reviewsCount: 210,
+            image: 'Dirty Coco Matcha Latte.jpg',
+            description: 'Layered masterpiece featuring bittersweet dark espresso shot resting on smooth iced matcha latte.',
+            ingredients: 'Uji Matcha, Arabica Espresso Shot, Fresh Milk, Ice.'
+        },    
+	{
+            id: 'm4',
+            title: 'Matcha Chocolate Milkshake',
+            category: 'Matcha Drinks',
+            price: 210,
+            rating: 4.7,
+            reviewsCount: 115,
+            image: 'Matcha Chocolate Milkshake.jpg',
+            description: 'Rich milkshake with smooth matcha and chocolate blend.',
+            ingredients: 'Uji Matcha, Chocolate Syrup, Milk, Ice Cream, Whipped Cream.'
+        },
+        {
+            id: 'm5',
+            title: 'Roasted Hojicha Mocha',
+            category: 'Coffee Fusions',
+            price: 205,
+            rating: 4.7,
+            reviewsCount: 76,
+            image: 'Roasted Hojicha Mocha.jpg',
+            description: 'Nutty roasted green tea paired with espresso and dark cocoa cream.',
+            ingredients: 'Roasted Hojicha Tea, Cocoa, Espresso, Milk.'
+        },
+         {
+            id: 'm6',
+            title: 'Matcha Latte with Hazelnut',
+            category: 'Matcha Drinks',
+            price: 210,
+            rating: 4.7,
+            reviewsCount: 67,
+            image: 'Matcha Latte with Hazelnut.jpg',
+            description: 'Delicious matcha latte with a nutty hazelnut flavor.',
+            ingredients: 'Uji Matcha Powder, Hazelnut Syrup, Milk, Ice.'
+        },
+        {
+            id: 'm7',
+            title: 'Matcha Cloud',
+            category: 'Matcha Drinks',
+            price: 155,
+            rating: 4.8,
+            reviewsCount: 65,
+            image: 'Matcha Cloud.jpg',
+            description: 'Fluffy matcha foam layered over creamy milk, a delight for matcha lovers.',
+            ingredients: 'Uji Matcha Powder, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm8',
+            title: 'Matcha Boba',
+            category: 'Matcha Drinks',
+            price: 195,
+            rating: 4.9,
+            reviewsCount: 82,
+            image: 'Matcha Boba.jpg',
+            description: 'Handcrafted strawberry compote topped with iced oat milk and fluffy matcha foam.',
+            ingredients: 'Fresh Strawberry Puree, Oat Milk, Uji Matcha Cream, Ice.'
+        },
+        {
+            id: 'm9',
+            title: 'Matcha Frappe',
+            category: 'Matcha Drinks',
+            price: 195,
+            rating: 4.9,
+            reviewsCount: 162,
+            image: 'Matcha Frappe.jpg',
+            description: 'Refreshing iced matcha frappe blended to perfection.',
+            ingredients: 'Uji Matcha Powder, Milk, Ice, Cane Sugar.'
+        },
+        {
+            id: 'm10',
+            title: 'Matcha Almond Latte',
+            category: 'Matcha Drinks',
+            price: 210,
+            rating: 4.8,
+            reviewsCount: 98,
+            image: 'Matcha Almond Latte..jpg',
+            description: 'Smooth blend of matcha with almond milk and touch of honey.',
+            ingredients: 'Uji Matcha Powder, Almond Milk, Honey, Ice.'
+	},
+        {
+            id: 'm11',
+            title: 'Strawberry Matcha Cloud',
+            category: 'Matcha Drinks',
+            price: 225,
+            rating: 4.9,
+            reviewsCount: 182,
+            image: 'Strawberry Matcha Cloud.jpg',
+            description: 'Handcrafted strawberry compote topped with iced oat milk and fluffy matcha foam.',
+            ingredients: 'Fresh Strawberry Puree, Oat Milk, Uji Matcha Cream, Ice.'
+        },
+        {
+            id: 'm12',
+            title: 'Vanilla Matcha Cold Brew',
+            category: 'Coffee Fusions',
+            price: 190,
+            rating: 4.6,
+            reviewsCount: 52,
+            image: 'Vanilla Matcha Cold Brew.jpg',
+            description: '12-hour steep dark cold brew topped with sweet vanilla matcha cold foam.',
+            ingredients: 'Cold Brew Coffee, Vanilla Foam, Matcha Powder.'
+        },
+	 {
+            id: 'm13',
+            title: 'Iced Matcha Mojito',
+            category: 'Matcha Drinks',
+            price: 210,
+            rating: 4.8,
+            reviewsCount: 130,
+            image: 'Mojito.jpg',
+            description: 'Refreshing mojito with a matcha twist, fresh mint and lime.',
+            ingredients: 'Uji Matcha Powder, Mint Leaves, Lime, Cane Sugar, Soda Water, Ice.'
+        },
+	{
+            id: 'm14',
+            title: 'Iced Matcha Latte with Oat Milk',
+            category: 'Matcha Drinks',
+            price: 180,
+            rating: 4.7,
+            reviewsCount: 101,
+            image: 'Iced Matcha Oat Milk.jpg',
+            description: 'Refreshing iced latte made with matcha and creamy oat milk.',
+            ingredients: 'Uji Matcha Powder, Oat Milk, Cane Syrup, Ice.'
+        },
+	{
+            id: 'm13',
+            title: 'Matcha Almond Milkshake',
+            category: 'Matcha Drinks',
+            price: 210,
+            rating: 4.8,
+            reviewsCount: 90,
+            image: 'Matcha Almond Milkshake.jpg',
+            description: 'Creamy almond milkshake with a vibrant matcha twist.',
+            ingredients: 'Almond Milk, Ice Cream, Uji Matcha, Honey.'
+        },
+        {
+            id: 'm16',
+            title: 'Matcha Latte with Soy Milk',
+            category: 'Matcha Drinks',
+            price: 185,
+            rating: 4.6,
+            reviewsCount: 96,
+            image: 'Matcha Latte with Soy Milk.jpg',
+            description: 'Smooth matcha latte made with creamy soy milk.',
+            ingredients: 'Uji Matcha Powder, Soy Milk, Cane Sugar, Ice.'
+        },
+        {
+            id: 'm17',
+            title: 'Matcha Mango Smoothie',
+            category: 'Matcha Drinks',
+            price: 220,
+            rating: 4.8,
+            reviewsCount: 110,
+            image: 'Matcha Mango Smoothie.jpg',
+            description: 'Sweet mango blended with refreshing matcha.',
+            ingredients: 'Fresh Mango, Uji Matcha Powder, Yogurt, Ice.'
+        },
+	{
+            id: 'm18',
+            title: 'Matcha Tonic Sparkler',
+            category: 'Matcha Drinks',
+            price: 185,
+            rating: 4.7,
+            reviewsCount: 58,
+            image: 'Matcha Tonic Sparkle.jpg',
+            description: 'Bubbly tonic water topped with a ribbon of whisked matcha and a citrus twist.',
+            ingredients: 'Uji Matcha Powder, Tonic Water, Lemon, Cane Syrup, Ice.'
+        },
+        {
+            id: 'm19',
+            title: 'Blueberry Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 215,
+            rating: 4.8,
+            reviewsCount: 92,
+            image: 'Blueberry Matcha Latte.jpg',
+            description: 'Tart blueberry compote layered under creamy iced matcha latte.',
+            ingredients: 'Uji Matcha Powder, Blueberry Compote, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm20',
+            title: 'Honey Lavender Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 215,
+            rating: 4.8,
+            reviewsCount: 74,
+            image: 'Honey Lavender Matcha Latte..jpg',
+            description: 'Floral lavender and golden honey softening bold ceremonial matcha.',
+            ingredients: 'Uji Matcha Powder, Lavender Syrup, Honey, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm21',
+            title: 'Salted Caramel Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 220,
+            rating: 4.9,
+            reviewsCount: 134,
+            image: 'Salted Caramel Matcha Latte..jpg',
+            description: 'Buttery salted caramel drizzled over smooth iced matcha latte.',
+            ingredients: 'Uji Matcha Powder, Salted Caramel Sauce, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm22',
+            title: 'Matcha Espresso Tonic',
+            category: 'Coffee Fusions',
+            price: 205,
+            rating: 4.6,
+            reviewsCount: 49,
+            image: 'Matcha Espresso Tonic.jpg',
+            description: 'Sparkling tonic with a double espresso shot and a float of matcha.',
+            ingredients: 'Arabica Espresso, Tonic Water, Uji Matcha Powder, Orange Peel, Ice.'
+        },
+        {
+            id: 'm23',
+            title: 'Ube Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 225,
+            rating: 4.9,
+            reviewsCount: 156,
+            image: 'Ube Matcha Latte.jpg',
+            description: 'Purple ube halaya swirled with fresh matcha and cold milk.',
+            ingredients: 'Uji Matcha Powder, Ube Halaya, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm24',
+            title: 'Matcha Lemonade',
+            category: 'Matcha Drinks',
+            price: 175,
+            rating: 4.6,
+            reviewsCount: 63,
+            image: 'Matcha Lemonade.jpg',
+            description: 'Bright, zesty lemonade finished with a cloud of matcha.',
+            ingredients: 'Uji Matcha Powder, Fresh Lemon Juice, Cane Syrup, Water, Ice.'
+        },
+        {
+            id: 'm25',
+            title: 'Peach Matcha Iced Tea',
+            category: 'Matcha Drinks',
+            price: 185,
+            rating: 4.7,
+            reviewsCount: 71,
+            image: 'Peach Matcha Iced Tea.jpg',
+            description: 'Juicy peach tea layered with chilled whisked matcha.',
+            ingredients: 'Uji Matcha Powder, Peach Puree, Black Tea, Cane Syrup, Ice.'
+        },
+        {
+            id: 'm26',
+            title: 'Brown Sugar Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 205,
+            rating: 4.9,
+            reviewsCount: 188,
+            image: 'Brown Sugar Matcha Latte.jpg',
+            description: 'Caramelized brown sugar syrup streaking through creamy matcha milk.',
+            ingredients: 'Uji Matcha Powder, Brown Sugar Syrup, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm27',
+            title: 'Matcha Affogato',
+            category: 'Matcha Desserts',
+            price: 190,
+            rating: 4.8,
+            reviewsCount: 82,
+            image: 'Matcha Affogato.jpg',
+            description: 'Vanilla gelato drowned in a hot shot of freshly whisked matcha.',
+            ingredients: 'Vanilla Gelato, Uji Matcha Powder, Hot Water, Cane Sugar.'
+        },
+        {
+            id: 'm28',
+            title: 'Hot Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 165,
+            rating: 4.8,
+            reviewsCount: 117,
+            image: 'Hot Matcha Latte.jpg',
+            description: 'Comforting steamed milk whisked with ceremonial matcha.',
+            ingredients: 'Uji Matcha Powder, Steamed Milk, Cane Syrup.'
+        },
+        {
+            id: 'm29',
+            title: 'Matcha White Chocolate Latte',
+            category: 'Matcha Drinks',
+            price: 215,
+            rating: 4.8,
+            reviewsCount: 99,
+            image: 'Matcha White Chocolate Latte.jpg',
+            description: 'Velvety white chocolate melted into earthy matcha latte.',
+            ingredients: 'Uji Matcha Powder, White Chocolate Sauce, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm30',
+            title: 'Pistachio Matcha Latte',
+            category: 'Matcha Drinks',
+            price: 230,
+            rating: 4.9,
+            reviewsCount: 142,
+            image: 'Pistachio Matcha Latte.jpg',
+            description: 'Nutty pistachio cream layered with ceremonial matcha and milk.',
+            ingredients: 'Uji Matcha Powder, Pistachio Cream, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm31',
+            title: 'Matcha Oreo Frappe',
+            category: 'Matcha Drinks',
+            price: 225,
+            rating: 4.8,
+            reviewsCount: 126,
+            image: 'Matcha Oreo Frappe..jpg',
+            description: 'Blended matcha frappe packed with crushed chocolate cookies.',
+            ingredients: 'Uji Matcha Powder, Chocolate Cookies, Milk, Whipped Cream, Ice.'
+        },
+        {
+            id: 'm32',
+            title: 'Matcha Coconut Water Cooler',
+            category: 'Matcha Drinks',
+            price: 170,
+            rating: 4.6,
+            reviewsCount: 54,
+            image: 'Matcha Coconut Water Cooler.jpg',
+            description: 'Light, hydrating coconut water shaken with matcha and lime.',
+            ingredients: 'Uji Matcha Powder, Coconut Water, Lime, Ice.'
+        },
+        {
+            id: 'm33',
+            title: 'Matcha Dalgona Coffee',
+            category: 'Coffee Fusions',
+            price: 210,
+            rating: 4.7,
+            reviewsCount: 88,
+            image: 'Matcha Dalgona Coffee.jpg',
+            description: 'Whipped matcha-coffee foam spooned over chilled milk.',
+            ingredients: 'Uji Matcha Powder, Instant Espresso, Sugar, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm34',
+            title: 'Matcha Cold Brew Float',
+            category: 'Coffee Fusions',
+            price: 220,
+            rating: 4.8,
+            reviewsCount: 69,
+            image: 'Matcha Cold Brew Float.jpg',
+            description: 'Slow-steeped cold brew crowned with a scoop of matcha ice cream.',
+            ingredients: 'Cold Brew Coffee, Matcha Ice Cream, Milk, Ice.'
+        },
+        {
+            id: 'm35',
+            title: 'Matcha Hojicha Swirl Latte',
+            category: 'Matcha Drinks',
+            price: 200,
+            rating: 4.8,
+            reviewsCount: 105,
+            image: 'Matcha Hojicha Swirl Latte.jpg',
+            description: 'Two Japanese teas, grassy matcha and toasty hojicha, in one cup.',
+            ingredients: 'Uji Matcha Powder, Roasted Hojicha Tea, Fresh Milk, Ice.'
+        },
+        {
+            id: 'm36',
+            title: 'Cheese Foam Matcha',
+            category: 'Matcha Drinks',
+            price: 215,
+            rating: 4.7,
+            reviewsCount: 91,
+            image: 'Cheese Foam Matcha.jpg',
+            description: 'Iced matcha topped with a salty-sweet cream cheese foam.',
+            ingredients: 'Uji Matcha Powder, Cream Cheese, Heavy Cream, Sea Salt, Milk, Ice.'
+        },
+        {
+            id: 'm37',
+            title: 'Matcha Kinako Latte',
+            category: 'Matcha Drinks',
+            price: 205,
+            rating: 4.7,
+            reviewsCount: 47,
+            image: 'Matcha Kinako Latte.jpg',
+            description: 'Roasted soybean flour adds toasty sweetness to creamy matcha.',
+            ingredients: 'Uji Matcha Powder, Kinako, Fresh Milk, Cane Syrup, Ice.'
+        },
+	{
+    	    id: 'm38',
+            title: 'Matcha Yogurt Parfait',
+            category: 'Matcha Desserts',
+            price: 160,
+            rating: 4.8,
+            reviewsCount: 98,
+            image: 'Matcha Yogurt Parfait.jpg',
+            description: 'Layers of yogurt, granola, and matcha sauce with fresh fruits.',
+            ingredients: 'Yogurt, Granola, Uji Matcha Syrup, Berries, Honey.'
+        },
+	 {
+            id: 'm39',
+            title: 'Matcha Pudding',
+            category: 'Matcha Desserts',
+            price: 120,
+            rating: 4.7,
+            reviewsCount: 70,
+            image: 'Matcha Pudding.jpg',
+            description: 'Wobbly Japanese-style pudding with a caramel base.',
+            ingredients: 'Milk, Eggs, Uji Matcha Powder, Sugar, Caramel.'
+        },
+        {
+            id: 'm40',
+            title: 'Matcha Chia Pudding',
+            category: 'Matcha Desserts',
+            price: 150,
+            rating: 4.6,
+            reviewsCount: 41,
+            image: 'Matcha Chia Pudding.jpg',
+            description: 'Overnight chia seeds soaked in matcha coconut milk with fresh fruit.',
+            ingredients: 'Chia Seeds, Coconut Milk, Uji Matcha Powder, Maple Syrup, Berries.'
+        },
+        {
+            id: 'm41',
+            title: 'Matcha Trail Mix',
+            category: 'Matcha Desserts',
+            price: 140,
+            rating: 4.5,
+            reviewsCount: 38,
+            image: 'Matcha Trail Mix.jpg',
+            description: 'Crunchy mix of nuts and seeds clustered with matcha-coated white chocolate.',
+            ingredients: 'Almonds, Cashews, Pumpkin Seeds, White Chocolate, Uji Matcha Powder.'
+        },
+        {
+            id: 'm42',
+            title: 'Matcha Panna Cotta',
+            category: 'Matcha Desserts',
+            price: 180,
+            rating: 4.9,
+            reviewsCount: 78,
+            image: 'Matcha Panna Cotta.jpg',
+            description: 'Silky smooth panna cotta infused with matcha flavor.',
+            ingredients: 'Cream, Sugar, Gelatin, Uji Matcha Powder.'
+        },
+        {
+            id: 'm43',
+            title: 'Matcha Coconut Cookies',
+            category: 'Matcha Pastries',
+            price: 95,
+            rating: 4.8,
+            reviewsCount: 50,
+            image: 'Matcha Coconut Cookies.jpg',
+            description: 'Crunchy cookies flavored with matcha and shredded coconut.',
+            ingredients: 'Flour, Butter, Uji Matcha, Desiccated Coconut, Sugar, Eggs.'
+        },
+        {
+            id: 'm44',
+            title: 'Matcha Mille Crepe Cake',
+            category: 'Matcha Pastries',
+            price: 300,
+            rating: 5.0,
+            reviewsCount: 90,
+            image: 'Matcha Mille Crepe Cake.jpg',
+            description: 'Layer upon layer of thin crepes and smooth matcha cream.',
+            ingredients: 'Eggs, Flour, Uji Matcha Powder, Heavy Cream, Sugar, Butter.'
+        },
+         {
+            id: 'm45',
+            title: 'Matcha Basque Burnt Cheesecake',
+            category: 'Matcha Pastries',
+            price: 280,
+            rating: 5.0,
+            reviewsCount: 94,
+            image: 'Matcha Basque Burnt Cheesecake.jpg',
+            description: 'Creamy caramelized Basque cheesecake infused with intense ceremonial green tea.',
+            ingredients: 'Cream Cheese, Kyoto Matcha, Heavy Cream, Eggs, Organic Sugar.'
+        },
+
+        {
+            id: 'm46',
+            title: 'Matcha Tiramisu',
+            category: 'Matcha Pastries',
+            price: 280,
+            rating: 4.8,
+            reviewsCount: 80,
+            image: 'matcha-tiramisu.jpg',
+            description: 'Italian classic infused with matcha and mascarpone cream.',
+            ingredients: 'Mascarpone, Sponge Cake, Uji Matcha, Sugar, Coffee.'
+        },
+        {
+            id: 'm47',
+            title: 'Matcha Almond Biscotti',
+            category: 'Matcha Pastries',
+            price: 100,
+            rating: 4.7,
+            reviewsCount: 45,
+            image: 'Matcha Almond Biscotti .jpg',
+            description: 'Crunchy biscotti with matcha and almond pieces.',
+            ingredients: 'Flour, Sugar, Uji Matcha, Almonds, Eggs, Butter.'
+        },
+        {
+            id: 'm48',   
+            title: 'Matcha Mint Chocolate Chip Cookie',
+            category: 'Matcha Pastries',
+            price: 99,
+            rating: 4.7,
+            reviewsCount: 60,
+            image: 'Matcha Mint Chocolate Chip Cookie.png',
+            description: 'Cookie infused with matcha and loaded with chocolate chips.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Sugar, Chocolate Chips, Eggs.'
+        },
+        {
+            id: 'm49',
+            title: 'Matcha Buttercream Cupcakes',
+            category: 'Matcha Pastries',
+            price: 150,
+            rating: 5.0,
+            reviewsCount: 75,
+            image: 'matcha-buttercream-cupcakes.jpg',
+            description: 'Moist vanilla cupcakes topped with rich matcha buttercream frosting.',
+            ingredients: 'Flour, Butter, Eggs, Sugar, Uji Matcha Powder, Cream.'
+        },
+        {
+            id: 'm50',
+            title: 'Matcha Mochi Ice Cream',
+            category: 'Matcha Ice Cream',
+            price: 115,
+            rating: 4.9,
+            reviewsCount: 140,
+            image: 'Matcha Mochi Ice Cream.jpg',
+            description: 'Soft mochi shell wrapped around creamy matcha ice cream.',
+            ingredients: 'Mochi, Uji Matcha Ice Cream, Sugar, Cornstarch.'
+        },
+        {
+            id: 'm51',
+            title: 'Matcha Olive Oil Cake',
+            category: 'Matcha Pastries',
+            price: 240,
+            rating: 4.8,
+            reviewsCount: 95,
+            image: 'Matcha Olive Oil Cake.jpg',
+            description: 'Moist olive oil cake infused with subtle matcha flavor.',
+            ingredients: 'Olive Oil, Flour, Eggs, Uji Matcha Powder, Sugar.'
+        },
+        {
+            id: 'm52',
+            title: 'Uji Ceremonial Matcha Powder (100g Pack)',
+            category: 'Wholesale/Packs',
+            price: 580,
+            rating: 5.0,
+            reviewsCount: 41,
+            image: 'Matcha Powder.jpg',
+            description: 'First harvest stone-ground Uji matcha tin for home brewing enthusiasts.',
+            ingredients: '100% Organic Shade-Grown Green Tea Powder.'
+        },
+        {
+            id: 'm53',
+            title: 'Matcha Panna Cotta',
+            category: 'Matcha Desserts',
+            price: 180,
+            rating: 4.9,
+            reviewsCount: 78,
+            image: 'Matcha Panna Cotta.jpg',
+            description: 'Silky smooth panna cotta infused with matcha flavor.',
+            ingredients: 'Cream, Sugar, Gelatin, Uji Matcha Powder.'
+        },
+        {
+            id: 'm54',
+            title: 'Matcha Swiss Roll',
+            category: 'Matcha Pastries',
+            price: 250,
+            rating: 4.8,
+            reviewsCount: 84,
+            image: 'Matcha Swiss Roll.jpg',
+            description: 'Light and fluffy Swiss roll layered with matcha cream.',
+            ingredients: 'Flour, Eggs, Sugar, Uji Matcha Powder, Cream.'
+        },
+        {
+            id: 'm55',
+            title: 'Matcha Chai Latte',
+            category: 'Matcha Drinks',
+            price: 200,
+            rating: 4.7,
+            reviewsCount: 88,
+            image: 'Matcha Chai Latte.jpg',
+            description: 'Earthy matcha blended with spicy chai and steamed milk.',
+            ingredients: 'Uji Matcha, Chai Spices, Milk, Cane Sugar.'
+        },
+        {
+            id: 'm56',
+            title: 'Matcha Granola Bars',
+            category: 'Matcha Desserts',
+            price: 130,
+            rating: 4.6,
+            reviewsCount: 44,
+            image: 'Matcha Granola Bars.jpg',
+            description: 'Healthy granola bars infused with matcha and nuts.',
+            ingredients: 'Oats, Nuts, Honey, Uji Matcha Powder, Seeds.'
+        },
+        {
+            id: 'm57',
+            title: 'Matcha Fluppy Cookie',
+            category: 'Matcha Pastries',
+            price: 95,
+            rating: 4.7,
+            reviewsCount: 75,
+            image: 'Matcha Cookie.jpg',
+            description: 'Crunchy, buttery cookies infused with rich matcha flavor.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Sugar, Eggs.'
+        },
+        {
+            id: 'm58',
+            title: 'Matcha Eclairs',
+            category: 'Matcha Pastries',
+            price: 210,
+            rating: 4.7,
+            reviewsCount: 85,
+            image: 'Matcha Eclairs.jpg',
+            description: 'Classic French eclairs filled with matcha cream.',
+            ingredients: 'Flour, Eggs, Butter, Uji Matcha Powder, Cream.'
+        },
+        {
+            id: 'm59',
+            title: 'Matcha Rice Krispies Treats',
+            category: 'Matcha Desserts',
+            price: 145,
+            rating: 4.7,
+            reviewsCount: 60,
+            image: 'Matcha Rice Krispies Treats.jpg',
+            description: 'Crunchy rice crisps coated with matcha-infused marshmallow.',
+            ingredients: 'Rice Krispies, Marshmallows, Uji Matcha Powder, Butter.'
+        },
+        {
+            id: 'm60',
+            title: 'Matcha Banana Bread',
+            category: 'Matcha Pastries',
+            price: 230,
+            rating: 4.8,
+            reviewsCount: 77,
+            image: 'Matcha Banana Bread.png',
+            description: 'Moist banana bread with a subtle matcha flavor.',
+            ingredients: 'Flour, Bananas, Sugar, Uji Matcha Powder, Eggs.'
+        },
+        {
+            id: 'm61',
+            title: 'Matcha White Chocolate Fudge',
+            category: 'Matcha Desserts',
+            price: 125,
+            rating: 4.9,
+            reviewsCount: 65,
+            image: 'Matcha White Chocolate Fudge.jpg',
+            description: 'Rich fudge combining white chocolate with earthy matcha.',
+            ingredients: 'White Chocolate, Condensed Milk, Uji Matcha Powder.'
+        },
+        {
+          id: 'm62',
+            title: 'Matcha Pancakes',
+            category: 'Matcha Pastries',
+            price: 280,
+            rating: 4.9,
+            reviewsCount: 110,
+            image: 'Matcha Pancakes.jpg',
+            description: 'Fluffy pancakes infused with matcha, served with fresh berries and syrup.',
+            ingredients: 'Flour, Eggs, Uji Matcha, Milk, Sugar, Baking Powder.'
+        },
+        {
+            id: 'm63',
+            title: 'Matcha Oatmeal Cookies',
+            category: 'Matcha Pastries',
+            price: 105,
+            rating: 4.7,
+            reviewsCount: 50,
+            image: 'Matcha Oatmeal Cookies.jpg',
+            description: 'Chewy oatmeal cookies flavored with matcha.',
+            ingredients: 'Oats, Flour, Uji Matcha Powder, Butter, Sugar.'
+        },
+        {
+            id: 'm64',
+            title: 'Matcha Ice Cream',
+            category: 'Matcha Desserts',
+            price: 120,
+            rating: 5.0,
+            reviewsCount: 140,
+            image: 'Matcha Ice Cream.jpg',
+            description: 'Creamy ice cream made with authentic Uji matcha for rich flavor.',
+            ingredients: 'Milk, Cream, Uji Matcha, Sugar.'
+        },
+        {
+            id: 'm65',
+            title: 'Matcha Tofu Cheesecake',
+            category: 'Matcha Pastries',
+            price: 270,
+            rating: 4.9,
+            reviewsCount: 70,
+            image: 'Matcha Cheesecake Slice with Tea Leaves.png',
+            description: 'Light and vegan-friendly cheesecake with matcha and tofu.',
+            ingredients: 'Tofu, Uji Matcha, Sugar, Vegan Biscuits, Coconut Oil.'
+        },
+     {
+            id: 'm66',
+            title: 'Flaky Matcha Croissant',
+            category: 'Matcha Pastries',
+            price: 155,
+            rating: 4.8,
+            reviewsCount: 65,
+            image: 'Flaky Matcha Croissant.jpg',
+            description: 'French butter croissant filled with rich matcha custard pastry cream.',
+            ingredients: 'French Butter, Flour, Matcha Custard, Powdered Sugar.'
+        },
+        {
+            id: 'm67',
+            title: 'Matcha Fudge Brownies',
+            category: 'Matcha Pastries',
+            price: 240,
+            rating: 4.8,
+            reviewsCount: 80,
+            image: 'Fudgy Matcha Chocolate Brownies.png',
+            description: 'Decadent brownies with a rich matcha and chocolate fusion.',
+            ingredients: 'Chocolate, Flour, Uji Matcha, Eggs, Butter, Sugar.'
+        },
+        {
+            id: 'm68',
+            title: 'Matcha Lemon Tart',
+            category: 'Matcha Pastries',
+            price: 250,
+            rating: 4.9,
+            reviewsCount: 78,
+            image: 'Matcha Lemon Tart with Mint and Pistachios.png',
+            description: 'Tart infused with zesty lemon and subtle matcha notes.',
+            ingredients: 'Flour, Lemon, Uji Matcha Powder, Eggs, Butter, Sugar.'
+        },
+        {
+            id: 'm69',
+            title: 'Matcha Churros with Chocolate Dip',
+            category: 'Matcha Pastries',
+            price: 210,
+            rating: 4.7,
+            reviewsCount: 62,
+            image: 'Matcha Churros with Chocolate Dip.png',
+            description: 'Crispy churros flavored with matcha, served with rich chocolate.',
+            ingredients: 'Flour, Uji Matcha Powder, Sugar, Oil, Chocolate Sauce.'
+        },
+        {
+            id: 'm70',
+            title: 'Matcha Energy Balls',
+            category: 'Matcha Desserts',
+            price: 135,
+            rating: 4.8,
+            reviewsCount: 48,
+            image: 'Matcha Energy Balls.jpg',
+            description: 'Healthy no-bake energy balls with matcha, nuts, and dates.',
+            ingredients: 'Dates, Nuts, Uji Matcha Powder, Coconut, Oats.'
+        },
+   	{
+            id: 'm71',
+            title: 'Matcha Sugar Cookies',
+            category: 'Matcha Pastries',
+            price: 90,
+            rating: 4.6,
+            reviewsCount: 58,
+            image: 'Matcha Sugar Cookies.jpg',
+            description: 'Soft, sparkly sugar cookies with a gentle matcha flavor.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Sugar, Eggs.'
+        },
+        {
+            id: 'm72',
+            title: 'Matcha Shortbread',
+            category: 'Matcha Pastries',
+            price: 95,
+            rating: 4.8,
+            reviewsCount: 66,
+            image: 'Matcha Shortbread.jpg',
+            description: 'Buttery, crumbly shortbread fingers dusted with matcha.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Powdered Sugar.'
+        },
+        {
+            id: 'm73',
+            title: 'Matcha Snickerdoodle',
+            category: 'Matcha Pastries',
+            price: 100,
+            rating: 4.7,
+            reviewsCount: 52,
+            image: 'Matcha Snickerdoodle.jpg',
+            description: 'Cinnamon-sugar rolled cookies with a green tea twist.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Cinnamon, Sugar, Eggs.'
+        },
+        {
+            id: 'm74',
+            title: 'Matcha Red Bean Cookies',
+            category: 'Matcha Pastries',
+            price: 105,
+            rating: 4.8,
+            reviewsCount: 61,
+            image: 'Matcha Red Bean Cookie.jpg',
+            description: 'Chewy matcha cookies stuffed with sweet adzuki paste.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Red Bean Paste, Sugar, Eggs.'
+        },
+        {
+            id: 'm75',
+            title: 'Matcha Pistachio Cookies',
+            category: 'Matcha Pastries',
+            price: 110,
+            rating: 4.9,
+            reviewsCount: 73,
+            image: 'Matcha Pistachio Cookies.jpg',
+            description: 'Thick, chewy cookies loaded with roasted pistachios.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Pistachios, Sugar, Eggs.'
+        },
+        {
+            id: 'm76',
+            title: 'Matcha Double Chocolate Cookie',
+            category: 'Matcha Pastries',
+            price: 105,
+            rating: 4.8,
+            reviewsCount: 84,
+            image: 'Matcha Double Chocolate Cookie.jpg',
+            description: 'Fudgy cookie with matcha dough and dark chocolate chunks.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Dark Chocolate, Sugar, Eggs.'
+        },
+        {
+            id: 'm77',
+            title: 'Matcha Cinnamon Roll',
+            category: 'Matcha Pastries',
+            price: 190,
+            rating: 4.8,
+            reviewsCount: 97,
+            image: 'Matcha Cinnamon Roll.jpg',
+            description: 'Pillowy rolls swirled with matcha filling and cream cheese glaze.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Cinnamon, Cream Cheese, Sugar.'
+        },
+        {
+            id: 'm78',
+            title: 'Matcha Scones',
+            category: 'Matcha Pastries',
+            price: 140,
+            rating: 4.6,
+            reviewsCount: 48,
+            image: 'Matcha Scones.jpg',
+            description: 'Flaky English-style scones with a delicate matcha aroma.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, Cream, Sugar, Baking Powder.'
+        },
+        {
+            id: 'm79',
+            title: 'Matcha Pain au Chocolat',
+            category: 'Matcha Pastries',
+            price: 175,
+            rating: 4.8,
+            reviewsCount: 68,
+            image: 'Matcha Pain au Chocolat.jpg',
+            description: 'Laminated matcha pastry wrapped around dark chocolate batons.',
+            ingredients: 'French Butter, Flour, Uji Matcha Powder, Dark Chocolate, Sugar.'
+        },
+        {
+            id: 'm80',
+            title: 'Matcha Cream Puffs',
+            category: 'Matcha Pastries',
+            price: 160,
+            rating: 4.8,
+            reviewsCount: 79,
+            image: 'Matcha Cream Puffs.jpg',
+            description: 'Crisp choux shells piped full of light matcha cream.',
+            ingredients: 'Flour, Eggs, Butter, Uji Matcha Powder, Cream, Sugar.'
+        },
+        {
+            id: 'm81',
+            title: 'Matcha Dorayaki',
+            category: 'Matcha Pastries',
+            price: 130,
+            rating: 4.7,
+            reviewsCount: 56,
+            image: 'Matcha Dorayaki.jpg',
+            description: 'Fluffy Japanese pancake sandwiches filled with sweet red bean.',
+            ingredients: 'Flour, Eggs, Honey, Uji Matcha Powder, Red Bean Paste.'
+        },
+        {
+            id: 'm82',
+            title: 'Matcha Muffin',
+            category: 'Matcha Pastries',
+            price: 120,
+            rating: 4.6,
+            reviewsCount: 62,
+            image: 'Matcha Muffin.jpg',
+            description: 'Domed bakery-style muffin with white chocolate chips.',
+            ingredients: 'Flour, Butter, Uji Matcha Powder, White Chocolate, Eggs, Sugar.'
+        },
+        {
+            id: 'm83',
+            title: 'Matcha Danish',
+            category: 'Matcha Pastries',
+            price: 170,
+            rating: 4.7,
+            reviewsCount: 51,
+            image: 'Matcha Danish.jpg',
+            description: 'Buttery danish with matcha custard and a glossy glaze.',
+            ingredients: 'Flour, French Butter, Matcha Custard, Sugar, Eggs.'
+        },
+        {
+            id: 'm84',
+            title: 'Matcha Strawberry Shortcake',
+            category: 'Matcha Pastries',
+            price: 260,
+            rating: 4.9,
+            reviewsCount: 112,
+            image: 'Matcha Strawberry Shortcake.jpg',
+            description: 'Matcha sponge layered with whipped cream and fresh strawberries.',
+            ingredients: 'Flour, Eggs, Uji Matcha Powder, Fresh Strawberries, Heavy Cream, Sugar.'
+        },
+        {
+            id: 'm85',
+            title: 'Matcha Red Bean Roll Cake',
+            category: 'Matcha Pastries',
+            price: 245,
+            rating: 4.8,
+            reviewsCount: 74,
+            image: 'Matcha Red Bean Roll Cake.jpg',
+            description: 'Soft matcha sponge rolled with cream and sweet adzuki beans.',
+            ingredients: 'Flour, Eggs, Uji Matcha Powder, Red Bean Paste, Cream, Sugar.'
+        },
+        {
+            id: 'm86',
+            title: 'Matcha Pound Cake',
+            category: 'Matcha Pastries',
+            price: 200,
+            rating: 4.7,
+            reviewsCount: 59,
+            image: 'Matcha Pound Cake.jpg',
+            description: 'Dense, buttery loaf slice with a bright green crumb.',
+            ingredients: 'Flour, Butter, Eggs, Uji Matcha Powder, Sugar, Vanilla.'
+        },
+        {
+            id: 'm87',
+            title: 'Matcha Cinnamon Babka',
+            category: 'Matcha Pastries',
+            price: 230,
+            rating: 4.8,
+            reviewsCount: 43,
+            image: 'Matcha Cinnamon Babka.jpg',
+            description: 'Twisted brioche loaf swirled with matcha and cinnamon sugar.',
+            ingredients: 'Brioche Dough, Uji Matcha Powder, Cinnamon, Butter, Sugar.'
+        },
+        {
+            id: 'm88',
+            title: 'Matcha Choux Cream Tart',
+            category: 'Matcha Pastries',
+            price: 220,
+            rating: 4.8,
+            reviewsCount: 57,
+            image: 'Matcha Choux Cream Tart.jpg',
+            description: 'Crisp tart shell filled with matcha cream and topped with mini puffs.',
+            ingredients: 'Flour, Butter, Eggs, Uji Matcha Powder, Cream, Sugar.'
+        },
+        {
+            id: 'm89',
+            title: 'Matcha Soft Serve',
+            category: 'Matcha Desserts',
+            price: 110,
+            rating: 4.9,
+            reviewsCount: 165,
+            image: 'Matcha Soft Serve.jpg',
+            description: 'Swirled soft serve cone with deep, earthy matcha flavor.',
+            ingredients: 'Milk, Cream, Uji Matcha Powder, Sugar, Waffle Cone.'
+        },
+        {
+            id: 'm90',
+            title: 'Matcha Gelato',
+            category: 'Matcha Desserts',
+            price: 125,
+            rating: 4.9,
+            reviewsCount: 108,
+            image: 'Matcha Gelato.jpg',
+            description: 'Dense, silky Italian-style gelato made with Uji matcha.',
+            ingredients: 'Whole Milk, Cream, Uji Matcha Powder, Sugar.'
+        },
+        {
+            id: 'm91',
+            title: 'Matcha Ice Cream Sandwich',
+            category: 'Matcha Desserts',
+            price: 135,
+            rating: 4.8,
+            reviewsCount: 72,
+            image: 'Matcha Ice Cream Sandwich.jpg',
+            description: 'Matcha ice cream pressed between two soft chocolate cookies.',
+            ingredients: 'Matcha Ice Cream, Chocolate Cookies, Butter, Sugar.'
+        },
+        {
+            id: 'm92',
+            title: 'Matcha Kakigori Shaved Ice',
+            category: 'Matcha Desserts',
+            price: 175,
+            rating: 4.8,
+            reviewsCount: 86,
+            image: 'Matcha Kakigori Shaved Ice.jpg',
+            description: 'Fluffy Japanese shaved ice with matcha syrup and condensed milk.',
+            ingredients: 'Shaved Ice, Uji Matcha Syrup, Condensed Milk, Red Bean.'
+        },
+        {
+            id: 'm93',
+            title: 'Matcha Crème Brûlée',
+            category: 'Matcha Desserts',
+            price: 210,
+            rating: 4.9,
+            reviewsCount: 64,
+            image: 'Matcha Crème Brûlée.jpg',
+            description: 'Silky matcha custard under a crackling caramelized sugar crust.',
+            ingredients: 'Heavy Cream, Egg Yolks, Uji Matcha Powder, Sugar, Vanilla.'
+        },
+        {
+            id: 'm94',
+            title: 'Matcha Glazed Artisan Donuts (3pcs)',
+            category: 'Matcha Pastries',
+            price: 240,
+            rating: 4.8,
+            reviewsCount: 110,
+            image: 'Matcha Glazed Artisan Donuts.jpg',
+            description: 'Fluffy sourdough brioche donuts dipped in thick ceremonial matcha glaze.',
+            ingredients: 'Brioche Dough, Uji Matcha Glaze, White Chocolate.'
+        },
+        {
+            id: 'm95',
+            title: 'Matcha Cheesecake Slice',
+            category: 'Matcha Pastries',
+            price: 210,
+            rating: 4.9,
+            reviewsCount: 85,
+            image: 'Matcha Cheesecake Slice with Tea Leaves.png',
+            description: 'Classic creamy cheesecake enriched with premium matcha flavor.',
+            ingredients: 'Cream Cheese, Sugar, Uji Matcha, Eggs, Biscuit Base.'
+        },
+        {
+            id: 'm96',
+            title: 'Matcha Latte Art Coffee',
+            category: 'Wholesale/Packs',
+            price: 800,
+            rating: 4.8,
+            reviewsCount: 36,
+            image: 'Matcha Starter Kit.jpg',
+            description: 'Everything to start at home: bamboo whisk, chawan bowl, scoop and ceremonial matcha.',
+            ingredients: 'Ceremonial Matcha Powder (30g), Bamboo Whisk, Ceramic Bowl, Bamboo Scoop.'
+        },
+        {
+            id: 'm97',
+            title: 'Matcha Chocolate Truffles',
+            category: 'Matcha Desserts',
+            price: 160,
+            rating: 4.9,
+            reviewsCount: 93,
+            image: 'Matcha Chocolate Truffles.jpg',
+            description: 'Melt-in-your-mouth ganache truffles rolled in matcha powder.',
+            ingredients: 'White Chocolate, Heavy Cream, Uji Matcha Powder, Butter.'
+        },
+        {
+            id: 'm98',
+            title: 'Matcha Popcorn',
+            category: 'Matcha Desserts',
+            price: 115,
+            rating: 4.6,
+            reviewsCount: 45,
+            image: 'Matcha Popcorn.jpg',
+            description: 'Light, crunchy popcorn tossed in matcha white chocolate coating.',
+            ingredients: 'Popcorn Kernels, White Chocolate, Uji Matcha Powder, Sea Salt.'
+        },
+        {
+            id: 'm99',
+            title: 'Matcha Chewy Cookie',
+            category: 'Matcha Pastries',
+            price: 950,
+            rating: 4.9,
+            reviewsCount: 36,
+            image: 'Matcha Chewy Cookie.jpg',
+            description: 'Everything to start at home: bamboo whisk, chawan bowl, scoop and ceremonial matcha.',
+            ingredients: 'Ceremonial Matcha Powder (30g), Bamboo Whisk, Ceramic Bowl, Bamboo Scoop.'
+        },
+        {
+            id: 'm100',
+            title: 'Culinary Grade Matcha Powder (250g Pack)',
+            category: 'Wholesale/Packs',
+            price: 720,
+            rating: 4.7,
+            reviewsCount: 29,
+            image: 'Culinary Matcha Powder.jpg',
+            description: 'Bold, budget-friendly matcha made for baking, smoothies and lattes.',
+            ingredients: '100% Shade-Grown Green Tea Powder.'
+        },
+ 
+    ];
+
+
+        // 2. STATE MANAGEMENT
+        let currentView = 'home';
+        let cart = JSON.parse(localStorage.getItem('matcharap_cart') || '[]');
+        let wishlist = JSON.parse(localStorage.getItem('matcharap_wishlist') || '[]');
+        let activeCategory = 'all';
+        let appliedDiscount = 0;
+
+        // 3. INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            updateCartBadge();
+            updateWishlistBadge();
+            renderHomeFeatured();
+            renderCatalog();
+        });
+
+        // 4. NAVIGATION & VIEWS
+        function navigateTo(viewId) {
+            currentView = viewId;
+            document.querySelectorAll('.page-view').forEach(view => view.classList.add('hidden'));
+            const target = document.getElementById(`view-${viewId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Update Nav Highlights
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-matcha-600', 'font-semibold');
+                btn.classList.add('text-coffee-500');
+            });
+            const activeNav = document.getElementById(`nav-${viewId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-coffee-500');
+                activeNav.classList.add('text-matcha-600', 'font-semibold');
+            }
+
+            if (viewId === 'cart') renderCartView();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // 5. TOAST NOTIFICATIONS
+        function showToast(message, icon = 'fa-circle-check') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-coffee-700 text-cream text-xs font-semibold px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5 pointer-events-auto animate-fade-in border border-coffee-500';
+            toast.innerHTML = `<i class="fa-solid ${icon} text-matcha-300 text-sm"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // 6. RENDER FUNCTIONS
+        function renderProductCard(p) {
+            const isWishlisted = wishlist.includes(p.id);
+            return `
+                <div class="bg-white rounded-2xl border border-matcha-100 overflow-hidden shadow-sm hover:shadow-md transition duration-300 flex flex-col group">
+                    <div class="relative h-48 bg-cream overflow-hidden">
+                        <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <button onclick="toggleWishlist('${p.id}')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-xs ${isWishlisted ? 'text-red-500' : 'text-coffee-400'} hover:scale-110 transition">
+                            <i class="${isWishlisted ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                        </button>
+                        <button onclick="openQuickView('${p.id}')" class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-coffee-700/90 text-white rounded-full text-[11px] font-semibold opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-sm">
+                            Quick View
+                        </button>
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow justify-between space-y-3">
+                        <div>
+                            <div class="flex items-center justify-between text-[11px] text-coffee-400 mb-1">
+                                <span>${p.category}</span>
+                                <span class="text-amber-500 font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-star"></i> ${p.rating}
+                                </span>
+                            </div>
+                            <h3 onclick="openProductDetail('${p.id}')" class="font-serif font-bold text-coffee-600 hover:text-matcha-600 transition cursor-pointer text-sm line-clamp-1">${p.title}</h3>
+                            <p class="text-xs text-coffee-400 line-clamp-2 mt-1">${p.description}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-2 border-t border-coffee-50">
+                            <span class="font-bold text-matcha-600 text-sm">₱${p.price.toFixed(2)}</span>
+                            <button onclick="quickAddToCart('${p.id}')" class="px-3.5 py-1.5 bg-matcha-600 hover:bg-matcha-700 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus text-[10px]"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHomeFeatured() {
+            const grid = document.getElementById('home-featured-grid');
+            if (grid) {
+                grid.innerHTML = PRODUCTS.slice(0, 4).map(renderProductCard).join('');
+            }
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-products-grid');
+            if (!grid) return;
+
+            let filtered = PRODUCTS.filter(p => {
+                const matchesCat = activeCategory === 'all' || p.category === activeCategory;
+                const searchVal = document.getElementById('catalog-search')?.value.toLowerCase() || '';
+                const matchesSearch = p.title.toLowerCase().includes(searchVal) || p.description.toLowerCase().includes(searchVal);
+                const maxPrice = parseFloat(document.getElementById('price-range')?.value || 600);
+                const matchesPrice = p.price <= maxPrice;
+                return matchesCat && matchesSearch && matchesPrice;
+            });
+
+            // Sorting
+            const sortVal = document.getElementById('catalog-sort')?.value || 'popular';
+            if (sortVal === 'price-low') filtered.sort((a,b) => a.price - b.price);
+            if (sortVal === 'price-high') filtered.sort((a,b) => b.price - a.price);
+            if (sortVal === 'rating') filtered.sort((a,b) => b.rating - a.rating);
+
+            const emptyMsg = document.getElementById('no-products-msg');
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyMsg?.classList.remove('hidden');
+            } else {
+                emptyMsg?.classList.add('hidden');
+                grid.innerHTML = filtered.map(renderProductCard).join('');
+            }
+        }
+
+        function setCategoryFilter(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'cat-btn active px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-matcha-600 text-white';
+                } else {
+                    btn.className = 'cat-btn px-4 py-2 rounded-full text-xs font-semibold transition whitespace-nowrap bg-cream text-coffee-600 border border-coffee-100 hover:bg-matcha-50';
+                }
+            });
+            renderCatalog();
+        }
+
+        function applyCatalogFilters() {
+            const val = document.getElementById('price-range').value;
+            document.getElementById('price-range-val').innerText = `₱${val}`;
+            renderCatalog();
+        }
+
+        function resetFilters() {
+            activeCategory = 'all';
+            document.getElementById('catalog-search').value = '';
+            document.getElementById('price-range').value = 600;
+            document.getElementById('price-range-val').innerText = '₱600';
+            setCategoryFilter('all');
+        }
+
+        // 7. PRODUCT DETAIL VIEW
+        function openProductDetail(productId) {
+            const p = PRODUCTS.find(item => item.id === productId);
+            if (!p) return;
+
+            const container = document.getElementById('product-detail-container');
+            const isDrink = p.category.includes('Drink') || p.category.includes('Fusion');
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div class="rounded-2xl overflow-hidden bg-cream border border-coffee-50 h-80 sm:h-96">
+                        <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="space-y-5">
+                        <div>
+                            <span class="text-matcha-600 text-xs font-semibold tracking-wider uppercase">${p.category}</span>
+                            <h1 class="font-serif text-2xl sm:text-3xl font-bold text-coffee-600 mt-1">${p.title}</h1>
+                            <div class="flex items-center gap-2 mt-2 text-xs">
+                                <span class="text-amber-500 font-bold"><i class="fa-solid fa-star"></i> ${p.rating}</span>
+                                <span class="text-coffee-300">(${p.reviewsCount} customer reviews)</span>
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-coffee-400 leading-relaxed">${p.description}</p>
+                        
+                        <div class="p-3.5 bg-cream rounded-xl text-xs text-coffee-500 space-y-1">
+                            <span class="font-bold block text-coffee-600">Key Ingredients:</span>
+                            <p>${p.ingredients}</p>
+                        </div>
+
+                        ${isDrink ? `
+                            <!-- Beverage Customizations -->
+                            <div class="space-y-3 pt-2">
+                                <div>
+                                    <label class="block text-xs font-bold text-coffee-600 mb-1">Serving Size</label>
+                                    <div class="flex gap-2">
+                                        <button onclick="selectOption(this, 'size-opt')" class="size-opt active px-3 py-1.5 border border-matcha-600 bg-matcha-50 text-matcha-700 rounded-lg text-xs font-semibold">Regular (12oz)</button>
+                                        <button onclick="selectOption(this, 'size-opt')" class="size-opt px-3 py-1.5 border border-coffee-100 bg-cream text-coffee-600 rounded-lg text-xs">Large (16oz +₱30)</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-coffee-600 mb-1">Sweetness Level</label>
+                                    <div class="flex gap-2">
+                                        <button onclick="selectOption(this, 'sweet-opt')" class="sweet-opt px-3 py-1.5 border border-coffee-100 bg-cream text-coffee-600 rounded-lg text-xs">0%</button>
+                                        <button onclick="selectOption(this, 'sweet-opt')" class="sweet-opt active px-3 py-1.5 border border-matcha-600 bg-matcha-50 text-matcha-700 rounded-lg text-xs font-semibold">50% Standard</button>
+                                        <button onclick="selectOption(this, 'sweet-opt')" class="sweet-opt px-3 py-1.5 border border-coffee-100 bg-cream text-coffee-600 rounded-lg text-xs">100% Extra</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-coffee-600 mb-1">Milk Choice</label>
+                                    <select id="p-detail-milk" class="bg-cream border border-coffee-100 rounded-lg px-3 py-2 text-xs text-coffee-600 w-full focus:outline-none">
+                                        <option>Fresh Dairy Milk</option>
+                                        <option>Oat Milk (+₱25)</option>
+                                        <option>Almond Milk (+₱25)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="flex items-center gap-4 pt-4 border-t border-coffee-50">
+                            <div class="flex items-center border border-coffee-100 rounded-xl bg-cream">
+                                <button onclick="adjustDetailQty(-1)" class="px-3 py-2 text-coffee-600 hover:text-matcha-600 font-bold">-</button>
+                                <span id="detail-qty" class="px-3 py-2 text-xs font-bold text-coffee-600">1</span>
+                                <button onclick="adjustDetailQty(1)" class="px-3 py-2 text-coffee-600 hover:text-matcha-600 font-bold">+</button>
+                            </div>
+                            <button onclick="addDetailToCart('${p.id}')" class="flex-grow py-3 bg-matcha-600 hover:bg-matcha-700 text-white font-bold rounded-xl text-xs shadow-md transition">
+                                Add to Cart • ₱${p.price.toFixed(2)}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            navigateTo('product-detail');
+        }
+
+        function selectOption(btn, groupClass) {
+            document.querySelectorAll(`.${groupClass}`).forEach(b => {
+                b.className = `${groupClass} px-3 py-1.5 border border-coffee-100 bg-cream text-coffee-600 rounded-lg text-xs`;
+            });
+            btn.className = `${groupClass} active px-3 py-1.5 border border-matcha-600 bg-matcha-50 text-matcha-700 rounded-lg text-xs font-semibold`;
+        }
+
+        function adjustDetailQty(delta) {
+            const el = document.getElementById('detail-qty');
+            let q = parseInt(el.innerText) + delta;
+            if (q < 1) q = 1;
+            el.innerText = q;
+        }
+
+        function addDetailToCart(productId) {
+            const p = PRODUCTS.find(item => item.id === productId);
+            if (!p) return;
+
+            const qty = parseInt(document.getElementById('detail-qty').innerText);
+            const size = document.querySelector('.size-opt.active')?.innerText || 'Standard';
+            const sweetness = document.querySelector('.sweet-opt.active')?.innerText || 'Standard';
+            const milk = document.getElementById('p-detail-milk')?.value || 'Standard';
+
+            const cartItem = {
+                cartId: `${p.id}-${Date.now()}`,
+                productId: p.id,
+                title: p.title,
+                price: p.price,
+                image: p.image,
+                quantity: qty,
+                options: { size, sweetness, milk }
+            };
+
+            cart.push(cartItem);
+            saveCart();
+            showToast(`Added ${qty}x ${p.title} to basket!`);
+        }
+
+        // 8. QUICK VIEW MODAL
+        function openQuickView(productId) {
+            const p = PRODUCTS.find(item => item.id === productId);
+            if (!p) return;
+
+            const content = document.getElementById('quick-view-content');
+            content.innerHTML = `
+                <div class="h-60 rounded-2xl overflow-hidden bg-cream">
+                    <img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover">
+                </div>
+                <div class="space-y-3">
+                    <span class="text-matcha-600 text-[10px] font-bold uppercase">${p.category}</span>
+                    <h3 class="font-serif text-xl font-bold text-coffee-600">${p.title}</h3>
+                    <p class="text-xs text-coffee-400 line-clamp-3">${p.description}</p>
+                    <div class="text-base font-bold text-matcha-600">₱${p.price.toFixed(2)}</div>
+                    <button onclick="quickAddToCart('${p.id}'); closeQuickViewModal();" class="w-full py-2.5 bg-matcha-600 hover:bg-matcha-700 text-white font-bold rounded-xl text-xs transition">
+                        Add to Basket
+                    </button>
+                </div>
+            `;
+            document.getElementById('quick-view-modal').classList.remove('hidden');
+        }
+
+        function closeQuickViewModal() {
+            document.getElementById('quick-view-modal').classList.add('hidden');
+        }
+
+        // 9. CART LOGIC
+        function quickAddToCart(productId) {
+            const p = PRODUCTS.find(item => item.id === productId);
+            if (!p) return;
+
+            const existing = cart.find(i => i.productId === productId && !i.options);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({
+                    cartId: `${p.id}-${Date.now()}`,
+                    productId: p.id,
+                    title: p.title,
+                    price: p.price,
+                    image: p.image,
+                    quantity: 1,
+                    options: null
+                });
+            }
+
+            saveCart();
+            showToast(`Added ${p.title} to basket`);
+        }
+
+        function saveCart() {
+            localStorage.setItem('matcharap_cart', JSON.stringify(cart));
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-count-badge');
+            if (badge) {
+                badge.innerText = totalItems;
+                if (totalItems > 0) {
+                    badge.classList.remove('scale-0');
+                    badge.classList.add('scale-100');
+                } else {
+                    badge.classList.remove('scale-100');
+                    badge.classList.add('scale-0');
+                }
+            }
+        }
+
+        function renderCartView() {
+            const container = document.getElementById('cart-items-container');
+            const emptyState = document.getElementById('cart-empty-state');
+            const mainLayout = document.getElementById('cart-main-layout');
+
+            if (cart.length === 0) {
+                emptyState.classList.remove('hidden');
+                mainLayout.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            mainLayout.classList.remove('hidden');
+
+            container.innerHTML = cart.map(item => `
+                <div class="bg-white p-4 rounded-2xl border border-matcha-100 flex items-center justify-between gap-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover bg-cream">
+                        <div>
+                            <h4 class="font-serif font-bold text-coffee-600 text-sm">${item.title}</h4>
+                            <p class="text-xs text-matcha-600 font-semibold mt-0.5">₱${item.price.toFixed(2)}</p>
+                            ${item.options ? `
+                                <span class="text-[10px] text-coffee-400 block mt-1">${item.options.size} • ${item.options.sweetness} • ${item.options.milk}</span>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center border border-coffee-100 rounded-lg bg-cream">
+                            <button onclick="updateCartQty('${item.cartId}', -1)" class="px-2 py-1 text-coffee-600 font-bold text-xs">-</button>
+                            <span class="px-2 py-1 text-xs font-bold text-coffee-600">${item.quantity}</span>
+                            <button onclick="updateCartQty('${item.cartId}', 1)" class="px-2 py-1 text-coffee-600 font-bold text-xs">+</button>
+                        </div>
+                        <button onclick="removeFromCart('${item.cartId}')" class="text-coffee-300 hover:text-red-500 text-sm transition">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            calculateCartTotals();
+        }
+
+        function updateCartQty(cartId, delta) {
+            const item = cart.find(i => i.cartId === cartId);
+            if (!item) return;
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.cartId !== cartId);
+            }
+            saveCart();
+            renderCartView();
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(i => i.cartId !== cartId);
+            saveCart();
+            renderCartView();
+            showToast('Item removed from basket');
+        }
+
+        function calculateCartTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 0 ? 60 : 0;
+            const discount = subtotal * appliedDiscount;
+            const total = Math.max(0, subtotal + shipping - discount);
+
+            document.getElementById('cart-subtotal').innerText = `₱${subtotal.toFixed(2)}`;
+            document.getElementById('cart-shipping').innerText = `₱${shipping.toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `₱${total.toFixed(2)}`;
+
+            const discRow = document.getElementById('cart-discount-row');
+            if (appliedDiscount > 0) {
+                discRow.classList.remove('hidden');
+                document.getElementById('cart-discount').innerText = `-₱${discount.toFixed(2)}`;
+            } else {
+                discRow.classList.add('hidden');
+            }
+
+            document.getElementById('modal-checkout-total').innerText = `₱${total.toFixed(2)}`;
+        }
+
+        function applyPromoCode() {
+            const input = document.getElementById('promo-input').value.trim().toUpperCase();
+            const msg = document.getElementById('promo-msg');
+
+            if (input === 'MATCHA10') {
+                appliedDiscount = 0.10;
+                msg.className = 'text-[11px] text-matcha-600 font-semibold block';
+                msg.innerText = '10% discount applied!';
+                showToast('Promo code MATCHA10 applied!');
+            } else {
+                appliedDiscount = 0;
+                msg.className = 'text-[11px] text-red-500 block';
+                msg.innerText = 'Invalid promo code.';
+            }
+            calculateCartTotals();
+        }
+
+        // 10. WISHLIST TOGGLE
+        function toggleWishlist(productId) {
+            if (wishlist.includes(productId)) {
+                wishlist = wishlist.filter(id => id !== productId);
+                showToast('Removed from wishlist', 'fa-heart-crack');
+            } else {
+                wishlist.push(productId);
+                showToast('Added to wishlist!', 'fa-heart');
+            }
+            localStorage.setItem('matcharap_wishlist', JSON.stringify(wishlist));
+            updateWishlistBadge();
+            renderCatalog();
+            renderHomeFeatured();
+        }
+
+        function updateWishlistBadge() {
+            const badge = document.getElementById('wishlist-badge');
+            if (badge) {
+                badge.innerText = wishlist.length;
+                if (wishlist.length > 0) {
+                    badge.classList.remove('scale-0');
+                    badge.classList.add('scale-100');
+                } else {
+                    badge.classList.remove('scale-100');
+                    badge.classList.add('scale-0');
+                }
+            }
+        }
+
+        function filterWishlist() {
+            if (wishlist.length === 0) {
+                showToast('Your wishlist is empty!', 'fa-heart');
+                return;
+            }
+            navigateTo('products');
+            const grid = document.getElementById('catalog-products-grid');
+            const wishlistedProds = PRODUCTS.filter(p => wishlist.includes(p.id));
+            grid.innerHTML = wishlistedProds.map(renderProductCard).join('');
+        }
+
+        // 11. CHECKOUT & ORDER CONFIRMATION
+        function openCheckoutModal() {
+            if (cart.length === 0) return;
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function processOrder(e) {
+            e.preventDefault();
+            const name = document.getElementById('chk-name').value;
+            const phone = document.getElementById('chk-phone').value;
+            const payment = document.getElementById('chk-payment').value;
+            const address = document.getElementById('chk-address').value;
+            const totalText = document.getElementById('modal-checkout-total').innerText;
+
+            closeCheckoutModal();
+
+            const receipt = document.getElementById('receipt-details');
+            receipt.innerHTML = `
+                <p><strong>Customer:</strong> ${name}</p>
+                <p><strong>Contact:</strong> ${phone}</p>
+                <p><strong>Payment:</strong> ${payment}</p>
+                <p><strong>Delivery Address:</strong> ${address}</p>
+                <p class="pt-2 border-t border-coffee-100"><strong>Items Ordered (${cart.length}):</strong></p>
+                <ul class="list-disc pl-4 space-y-0.5">
+                    ${cart.map(i => `<li>${i.quantity}x ${i.title}</li>`).join('')}
+                </ul>
+                <p class="pt-2 font-bold text-matcha-600 border-t border-coffee-100">Total Paid: ${totalText}</p>
+            `;
+
+            // Reset Cart
+            cart = [];
+            appliedDiscount = 0;
+            saveCart();
+            renderCartView();
+
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+            navigateTo('home');
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            showToast('Thank you! Message sent successfully.');
+            e.target.reset();
+        }
+
+        function handleNewsletter(e) {
+            e.preventDefault();
+            showToast('Subscribed to MATCHARAP updates!');
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
